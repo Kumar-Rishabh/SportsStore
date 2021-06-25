@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-class CartCounter extends StatefulWidget {
+class CartCounter extends StatefulWidget{
+
   @override
   _CartCounterState createState() => _CartCounterState();
 }
@@ -17,12 +18,11 @@ class _CartCounterState extends State<CartCounter> {
           bulidOutlineButton(
               icon: Icons.remove,
               press: (){
-                if(countno>1){
+                if(countno>1) {
                   setState(() {
                     countno--;
                   });
                 }
-
               }),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -61,3 +61,5 @@ SizedBox bulidOutlineButton({IconData icon,Function press}){
       ),
     );
 }
+
+

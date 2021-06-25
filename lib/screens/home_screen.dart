@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'badminton_screen.dart';
+import 'cart_screen.dart';
 import 'cricket_screen.dart';
 import 'footbal_screen.dart';
 import 'others_screen.dart';
@@ -44,7 +45,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
           ),
           IconButton(
             icon: SvgPicture.asset('assets/icons/cart.svg'),
-            onPressed: (){},
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CartScreen()),
+              );
+            },
           ),
           SizedBox(
             width: 10.0,

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245802683722",
+    "project_id": "sports-store-97f4e",
+    "storage_bucket": "sports-store-97f4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245802683722:android:b8a2caeaafd35322a7c5b3",
+        "android_client_info": {
+          "package_name": "com.rishabh.sports_store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245802683722-srlfhqtv273slfe7kthuq31577mu4kik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaWQ12Imp7Fn36svYGMkI5IgfCjLjRMJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245802683722-srlfhqtv273slfe7kthuq31577mu4kik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:provider/provider.dart';
+import 'package:sports_store/Components/cart.dart';
 import 'package:sports_store/Components/cart_counter.dart';
 import 'package:sports_store/models/football_product.dart';
+import 'package:sports_store/screens/cart_screen.dart';
 
 import '../constant.dart';
 
@@ -12,6 +14,7 @@ class FootballDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cart=Provider.of<Cart>(context);
     Size size=MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: product.color,
@@ -114,22 +117,11 @@ class FootballDetailScreen extends StatelessWidget {
                   child: IconButton(
                     icon: SvgPicture.asset('assets/icons/add-to-cart.svg',color: product.color,),
                     onPressed: (){
-                      Alert(
-                        context: context,
-                        type: AlertType.success,
-                        title: "ADDED",
-                        desc: "Item added to cart.",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "COOL",
-                              style: TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                            width: 120,
-                          )
-                        ],
-                      ).show();
+                      cart.addItem(product.id.toString(), product.title, product.price.toDouble(),product.image);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        duration: Duration(seconds: 3),
+                        content: Text('Item Added to Cart'),
+                      ));
                     },
                   ),
                 ),
@@ -138,6 +130,11 @@ class FootballDetailScreen extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: (){
+                        cart.addItem(product.id.toString(), product.title, product.price.toDouble(),product.image);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CartScreen()),
+                        );
 
                       },
                       child: Text(
@@ -255,7 +252,12 @@ class FootballDetailScreen extends StatelessWidget {
         ),
         IconButton(
           icon: SvgPicture.asset('assets/icons/cart.svg'),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartScreen()),
+            );
+          },
         ),
         SizedBox(
           width: 10.0,
@@ -272,6 +274,7 @@ class ColorDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size=MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 5.0,right: 10.0),
       padding: EdgeInsets.all(2.5),

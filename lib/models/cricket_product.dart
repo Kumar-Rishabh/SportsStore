@@ -23,7 +23,7 @@ List<Cricket_Product> product=[
     id: 1,
     title: 'Bats',
     price: 1500,
-    description: dummyText,
+    description: 'English willo bat',
     image: 'assets/images/bat.jpg',
     color: Color(0xFF3D82AE),
     size: 38,

@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:provider/provider.dart';
+import 'package:sports_store/Components/cart.dart';
 import 'package:sports_store/Components/cart_counter.dart';
 import 'package:sports_store/models/cricket_product.dart';
+import 'package:sports_store/screens/cart_screen.dart';
 
 import '../constant.dart';
 
-class CricketDetailScreen extends StatelessWidget {
+
+
+class CricketDetailScreen extends StatefulWidget {
   final Cricket_Product product;
+
   CricketDetailScreen(this.product);
+
+  @override
+  _CricketDetailScreenState createState() => _CricketDetailScreenState();
+}
+
+class _CricketDetailScreenState extends State<CricketDetailScreen> {
+
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
+    final cart=Provider.of<Cart>(context);
     return Scaffold(
-      backgroundColor: product.color,
+      backgroundColor: widget.product.color,
       appBar:buildAppBar(context),
       body: SingleChildScrollView(
         child: Column(
@@ -58,7 +71,7 @@ class CricketDetailScreen extends StatelessWidget {
                                 style: TextStyle(color: ktextColor),
                                 children: [
                                   TextSpan(text: 'Size\n'),
-                                  TextSpan(text: '${product.size}',style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.bold)),
+                                  TextSpan(text: '${widget.product.size}',style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.bold)),
                                 ],
                               ),
                               ),
@@ -67,7 +80,7 @@ class CricketDetailScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 20.0),
-                          child: Text(product.description,
+                          child: Text(widget.product.description,
                             style: TextStyle(
                               height: 1.5,
                             ),
@@ -107,28 +120,17 @@ class CricketDetailScreen extends StatelessWidget {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20.0),
                                     border: Border.all(
-                                      color: product.color,
+                                      color: widget.product.color,
                                     )
                                 ),
                                 child: IconButton(
-                                  icon: SvgPicture.asset('assets/icons/add-to-cart.svg',color: product.color,),
+                                  icon: SvgPicture.asset('assets/icons/add-to-cart.svg',color: widget.product.color,),
                                   onPressed: (){
-                                    Alert(
-                                      context: context,
-                                      type: AlertType.success,
-                                      title: "ADDED",
-                                      desc: "Item added to cart.",
-                                      buttons: [
-                                        DialogButton(
-                                          child: Text(
-                                            "COOL",
-                                            style: TextStyle(color: Colors.white, fontSize: 20),
-                                          ),
-                                          onPressed: () => Navigator.pop(context),
-                                          width: 120,
-                                        )
-                                      ],
-                                    ).show();
+                                    cart.addItem(widget.product.id.toString(), widget.product.title, widget.product.price.toDouble(),widget.product.image);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      duration: Duration(seconds: 3),
+                                      content: Text('Item Added to Cart'),
+                                    ));
                                   },
                                 ),
                               ),
@@ -137,6 +139,11 @@ class CricketDetailScreen extends StatelessWidget {
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: (){
+                                      cart.addItem(widget.product.id.toString(), widget.product.title, widget.product.price.toDouble(),widget.product.image);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => CartScreen()),
+                                      );
 
                                     },
                                     child: Text(
@@ -145,12 +152,12 @@ class CricketDetailScreen extends StatelessWidget {
                                     ),
                                     style: ButtonStyle(
                                         foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                        backgroundColor: MaterialStateProperty.all<Color>(product.color),
+                                        backgroundColor: MaterialStateProperty.all<Color>(widget.product.color),
                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(20.0),
 
-                                                side: BorderSide(color: product.color)
+                                                side: BorderSide(color: widget.product.color)
                                             )
                                         )
                                     ),
@@ -182,7 +189,7 @@ class CricketDetailScreen extends StatelessWidget {
 
                         ),
                         Text(
-                          product.title,
+                          widget.product.title,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 40.0,
@@ -199,7 +206,7 @@ class CricketDetailScreen extends StatelessWidget {
                               children: [
                                 TextSpan(text: 'Price\n'),
                                 TextSpan(
-                                  text: '\R\s${product.price}',
+                                  text: '\R\s${widget.product.price}',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30.0,
@@ -214,8 +221,8 @@ class CricketDetailScreen extends StatelessWidget {
                             ),
                             Expanded(
                                 child: Hero(
-                                  tag: '${product.id}',
-                                  child: Image.asset(product.image,
+                                  tag: '${widget.product.id}',
+                                  child: Image.asset(widget.product.image,
                                     fit: BoxFit.fill,
                                   ),
                                 )
@@ -235,10 +242,9 @@ class CricketDetailScreen extends StatelessWidget {
     );
   }
 
-
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: product.color,
+      backgroundColor: widget.product.color,
       elevation: 0,
       leading: IconButton(
         icon: SvgPicture.asset('assets/icons/back.svg'),
@@ -252,12 +258,25 @@ class CricketDetailScreen extends StatelessWidget {
           icon: SvgPicture.asset('assets/icons/search.svg'),
           onPressed: () {},
         ),
-        IconButton(
-          icon: SvgPicture.asset('assets/icons/cart.svg'),
-          onPressed: () {},
-        ),
-        SizedBox(
-          width: 10.0,
+        Stack(
+          children:[
+
+            IconButton(
+              icon: SvgPicture.asset('assets/icons/cart.svg'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CartScreen()),
+                );
+              },
+            ),
+
+            SizedBox(
+              width: 10.0,
+            ),
+          ],
+
+
         ),
       ],
     );
@@ -291,3 +310,4 @@ class ColorDot extends StatelessWidget {
     );
   }
 }
+

@@ -66,7 +66,7 @@ List<Other_Product> product=[
   ),
   Other_Product(
       id: 6,
-      title: 'Smith Machine',
+      title: 'Dumbbell',
       price: 500,
       description: dummyText,
       image: 'assets/images/dumble.jpg',
